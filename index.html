@@ -1,0 +1,531 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="Xevil-Network Command Center: roadmap, project activity, and governance status.">
+  <title>Xevil-Network | Command Center</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080c17;
+      --panel: #10182a;
+      --panel2: #141e33;
+      --line: #293650;
+      --text: #edf2ff;
+      --muted: #9aa9c4;
+      --blue: #8ab4ff;
+      --purple: #c3a5ff;
+      --green: #82ddb4;
+      --yellow: #f2cf86;
+      --red: #ff9eaa;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 10% 0%, #1b2850 0, transparent 38%),
+        var(--bg);
+      color: var(--text);
+      font: 15px/1.55 system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    }
+
+    a { color: var(--blue); }
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 3px;
+    }
+
+    button {
+      cursor: pointer;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 9px 13px;
+      background: var(--panel2);
+      color: var(--text);
+      font: inherit;
+    }
+
+    button:hover { border-color: var(--blue); }
+    button:disabled { cursor: wait; opacity: .65; }
+
+    .shell { max-width: 1440px; margin: auto; padding: 26px; }
+    .topbar, .actions, .section-heading, .phase-heading, .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 13px; }
+    .logo {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #8ab4ff, #c3a5ff);
+      color: #10162a;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: clamp(23px, 4vw, 34px); margin-bottom: 2px; }
+    h2 { font-size: 19px; margin-bottom: 5px; }
+    h3 { font-size: 16px; margin-bottom: 5px; }
+    .eyebrow {
+      color: var(--purple);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .muted, small { color: var(--muted); }
+    .muted { margin-bottom: 0; }
+    .hero { margin: 34px 0 22px; }
+    .hero p { max-width: 760px; color: var(--muted); }
+    .actions { justify-content: flex-start; flex-wrap: wrap; margin-top: 18px; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 9px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .pill.good { color: var(--green); }
+    .pill.warn { color: var(--yellow); }
+    .pill.bad { color: var(--red); }
+
+    .grid { display: grid; gap: 16px; }
+    .metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .main-grid { grid-template-columns: minmax(0, 1.6fr) minmax(290px, 1fr); margin-top: 16px; }
+    .card {
+      min-width: 0;
+      padding: 20px;
+      background: linear-gradient(145deg, #121b2e, #0e1525);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .metric-label { color: var(--muted); font-size: 13px; }
+    .metric-value { margin: 7px 0 3px; font-size: 30px; font-weight: 750; letter-spacing: -.04em; }
+    .metric-note { color: var(--muted); font-size: 12px; }
+    .section-heading { margin-bottom: 18px; }
+    .section-heading p { color: var(--muted); margin: 0; font-size: 13px; }
+
+    .phase {
+      padding: 16px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .phase:first-of-type { border-top: 0; padding-top: 0; }
+    .phase-heading { align-items: flex-start; }
+    .phase-number {
+      flex: 0 0 35px;
+      height: 35px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: #202b45;
+      color: var(--blue);
+      font-weight: 800;
+    }
+
+    .phase-title { flex: 1; }
+    .phase-title p { color: var(--muted); margin: 3px 0 0; font-size: 13px; }
+    .progress-track {
+      height: 7px;
+      margin: 13px 0 10px;
+      overflow: hidden;
+      background: #253149;
+      border-radius: 99px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #8ab4ff, #c3a5ff);
+      border-radius: inherit;
+    }
+
+    .task-list { display: grid; gap: 9px; margin-top: 12px; }
+    .task {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      color: #d9e2f5;
+      font-size: 13px;
+    }
+
+    .task input { margin-top: 4px; accent-color: #a995ff; }
+    .task input:disabled { opacity: .85; }
+    .task-status { color: var(--muted); font-size: 11px; margin-left: auto; }
+    .activity-list { display: grid; gap: 0; }
+    .activity-item { padding: 13px 0; border-top: 1px solid var(--line); }
+    .activity-item:first-child { border-top: 0; padding-top: 0; }
+    .activity-item a { font-weight: 650; text-decoration: none; overflow-wrap: anywhere; }
+    .activity-item a:hover { text-decoration: underline; }
+    .activity-item p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+    .status-line { display: flex; justify-content: space-between; gap: 12px; margin: 10px 0; }
+    .status-line span:first-child { color: var(--muted); }
+    .notice {
+      margin-top: 15px;
+      padding: 13px;
+      background: #20202a;
+      border: 1px solid #4a3e34;
+      border-radius: 12px;
+      color: #f1d5a4;
+      font-size: 13px;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 24px 2px 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .error { color: var(--red); }
+    .empty { color: var(--muted); font-size: 13px; padding: 10px 0; }
+    .nowrap { white-space: nowrap; }
+
+    @media (max-width: 950px) {
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .main-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .shell { padding: 16px; }
+      .topbar { align-items: flex-start; }
+      .topbar .pill { display: none; }
+      .metrics { gap: 10px; }
+      .card { padding: 16px; }
+      .metric-value { font-size: 25px; }
+      .phase-heading { flex-wrap: wrap; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">XN</div>
+        <div>
+          <div class="eyebrow">XEvil009 · Seaverse</div>
+          <h1>Command Center</h1>
+          <p class="muted">Xevil-Network operational overview</p>
+        </div>
+      </div>
+      <span class="pill">Supervised operations</span>
+    </header>
+
+    <section class="hero" aria-labelledby="overview-title">
+      <div class="eyebrow">Network development</div>
+      <h2 id="overview-title">Roadmap & project intelligence</h2>
+      <p>
+        A centralized view of planned milestones, repository activity, and
+        governance safeguards. Activity data is sourced from GitHub; roadmap
+        completion is not inferred automatically from commits.
+      </p>
+      <div class="actions">
+        <button id="refresh-button" type="button">Refresh GitHub activity</button>
+        <a href="https://github.com/XEvil009/Xevil-Network-Command-Center"
+           target="_blank" rel="noopener noreferrer">Open repository ↗</a>
+        <a href="https://github.com/XEvil009/Xevil-Network-Command-Center/tree/feature/command-center-dashboard"
+           target="_blank" rel="noopener noreferrer">Open working branch ↗</a>
+      </div>
+      <p id="last-updated" class="muted" style="margin-top:12px" aria-live="polite">
+        GitHub activity has not been loaded yet.
+      </p>
+    </section>
+
+    <section class="grid metrics" aria-label="Repository metrics">
+      <article class="card">
+        <div class="metric-label">Open pull requests</div>
+        <div class="metric-value" id="metric-prs">—</div>
+        <div class="metric-note">Review and integration queue</div>
+      </article>
+      <article class="card">
+        <div class="metric-label">Open issues</div>
+        <div class="metric-value" id="metric-issues">—</div>
+        <div class="metric-note">Tracked repository issues</div>
+      </article>
+      <article class="card">
+        <div class="metric-label">Branches</div>
+        <div class="metric-value" id="metric-branches">—</div>
+        <div class="metric-note">Repository branches visible to API</div>
+      </article>
+      <article class="card">
+        <div class="metric-label">Roadmap phases</div>
+        <div class="metric-value">5</div>
+        <div class="metric-note">Initial program structure</div>
+      </article>
+    </section>
+
+    <section class="grid main-grid">
+      <article class="card">
+        <div class="section-heading">
+          <div>
+            <h2>Implementation roadmap</h2>
+            <p>Initial milestones · manually governed</p>
+          </div>
+          <span class="pill warn">Planning baseline</span>
+        </div>
+
+        <div id="roadmap">
+          <section class="phase">
+            <div class="phase-heading">
+              <div class="phase-number">01</div>
+              <div class="phase-title">
+                <h3>Foundation & governance</h3>
+                <p>Repository standards, ownership, policies, and documentation.</p>
+              </div>
+              <span class="pill">Baseline</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+            <small>Progress: not yet verified</small>
+            <div class="task-list">
+              <label class="task"><input type="checkbox" disabled> <span>Confirm project charter and repository conventions</span></label>
+              <label class="task"><input type="checkbox" disabled> <span>Document access control and approval requirements</span></label>
+              <label class="task"><input type="checkbox" disabled> <span>Define issue, pull request, and release procedures</span></label>
+            </div>
+          </section>
+
+          <section class="phase">
+            <div class="phase-heading">
+              <div class="phase-number">02</div>
+              <div class="phase-title">
+                <h3>Command Center dashboard</h3>
+                <p>Roadmap visibility, repository activity, and status reporting.</p>
+              </div>
+              <span class="pill warn">In progress</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+            <small>Progress: pending review and verification</small>
+            <div class="task-list">
+              <label class="task"><input type="checkbox" disabled> <span>Build responsive dashboard interface</span></label>
+              <label class="task"><input type="checkbox" disabled> <span>Connect public GitHub repository activity</span></label>
+              <label class="task"><input type="checkbox" disabled> <span>Validate accessibility and failure states</span></label>
+              <label class="task"><input type="checkbox" disabled> <span>Document deployment and maintenance</span></label>
+            </div>
+          </section>
+
+          <section class="phase">
+            <div class="phase-heading">
+              <div class="phase-number">03</div>
+              <div class="phase-title">
+                <h3>Xevier assistant architecture</h3>
+                <p>Command interface, orchestration boundaries, and system design.</p>
+              </div>
+              <span class="pill">Planned</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+            <small>Progress: not started</small>
+            <div class="task-list">
+              <label class="task"><input type="checkbox" disabled> <span>Define service boundaries and interfaces</span></label>
+              <label class="task"><input type="checkbox" disabled> <span>Specify identity, authorization, and audit models</span></label>
+              <label class="task"><input type="checkbox" disabled> <span>Evaluate voice and chat integration options</span></label>
+            </div>
+          </section>
+
+          <section class="phase">
+            <div class="phase-heading">
+              <div class="phase-number">04</div>
+              <div class="phase-title">
+                <h3>GodVerse agent operations</h3>
+                <p>Delegated workflows, monitoring, approvals, and emergency controls.</p>
+              </div>
+              <span class="pill">Planned</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+            <small>Progress: not started</small>
+            <div class="task-list">
+              <label class="task"><input type="checkbox" disabled> <span>Define least-privilege agent permissions</span></label>
+              <label class="task"><input type="checkbox" disabled> <span>Design approval gates and audit trails</span></label>
+              <label class="task"><input type="checkbox" disabled> <span>Specify shutdown and capability-revocation controls</span></label>
+            </div>
+          </section>
+
+          <section class="phase">
+            <div class="phase-heading">
+              <div class="phase-number">05</div>
+              <div class="phase-title">
+                <h3>Validation & controlled rollout</h3>
+                <p>Testing, observability, recovery, and authorized releases.</p>
+              </div>
+              <span class="pill">Planned</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+            <small>Progress: not started</small>
+            <div class="task-list">
+              <label class="task"><input type="checkbox" disabled> <span>Establish automated quality and security checks</span></label>
+              <label class="task"><input type="checkbox" disabled> <span>Document rollback and incident response</span></label>
+              <label class="task"><input type="checkbox" disabled> <span>Require explicit approval before production rollout</span></label>
+            </div>
+          </section>
+        </div>
+      </article>
+
+      <aside class="grid" style="align-content:start">
+        <section class="card">
+          <div class="section-heading">
+            <div>
+              <h2>Governance & safety</h2>
+              <p>Operating constraints</p>
+            </div>
+          </div>
+          <div class="status-line"><span>Authority</span><strong>xEvil009</strong></div>
+          <div class="status-line"><span>Operating mode</span><span class="pill good">Supervised</span></div>
+          <div class="status-line"><span>Production deployment</span><span class="pill warn">Approval required</span></div>
+          <div class="status-line"><span>Direct commits to main</span><span class="pill good">Prohibited</span></div>
+          <div class="status-line"><span>Emergency shutdown</span><span class="pill warn">Design requirement</span></div>
+          <div class="notice">
+            This dashboard is informational only. It does not grant permissions,
+            execute agent commands, approve changes, or deploy software.
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="section-heading">
+            <div>
+              <h2>Recent repository activity</h2>
+              <p>Live data from GitHub's public API</p>
+            </div>
+          </div>
+          <div id="activity" class="activity-list" aria-live="polite">
+            <p class="empty">Use Refresh GitHub activity to load repository data.</p>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Project links</h2>
+          <div class="activity-list">
+            <div class="activity-item">
+              <a href="https://github.com/XEvil009/Xevil-Network-Command-Center/issues"
+                 target="_blank" rel="noopener noreferrer">Issues & work tracking ↗</a>
+              <p>Track requirements, bugs, and implementation tasks.</p>
+            </div>
+            <div class="activity-item">
+              <a href="https://github.com/XEvil009/Xevil-Network-Command-Center/pulls"
+                 target="_blank" rel="noopener noreferrer">Pull requests ↗</a>
+              <p>Review changes before integration.</p>
+            </div>
+            <div class="activity-item">
+              <a href="https://github.com/XEvil009/Xevil-Network-Command-Center/actions"
+                 target="_blank" rel="noopener noreferrer">GitHub Actions ↗</a>
+              <p>Inspect configured automation and workflow results.</p>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </section>
+
+    <footer class="footer">
+      <span>XEvil009 · Xevil-Network · Seaverse Command Center</span>
+      <span>Dashboard version 0.1.0 · Activity data may be delayed or rate-limited.</span>
+    </footer>
+  </main>
+
+  <script>
+    "use strict";
+
+    const OWNER = "XEvil009";
+    const REPO = "Xevil-Network-Command-Center";
+    const API = `https://api.github.com/repos/${OWNER}/${REPO}`;
+    const REFRESH_INTERVAL_MS = 60_000;
+    const $ = (id) => document.getElementById(id);
+
+    let refreshing = false;
+    let refreshTimer = null;
+
+    function setText(id, value) {
+      $(id).textContent = String(value);
+    }
+
+    function safeDate(value) {
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? "Date unavailable" : date.toLocaleString();
+    }
+
+    async function getJson(path) {
+      const response = await fetch(`${API}${path}`, {
+        headers: { Accept: "application/vnd.github+json" },
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+        if (response.status === 403 || response.status === 429) {
+          throw new Error("GitHub API rate limit or access restriction. Try again later.");
+        }
+        if (response.status === 404) {
+          throw new Error("Repository not found or not publicly accessible.");
+        }
+        throw new Error(`GitHub API request failed (${response.status}).`);
+      }
+
+      return response.json();
+    }
+
+    function makeActivityItem(title, detail, url, date) {
+      const item = document.createElement("div");
+      item.className = "activity-item";
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = title;
+
+      const description = document.createElement("p");
+      description.textContent = `${detail} · ${safeDate(date)}`;
+
+      item.append(link, description);
+      return item;
+    }
+
+    function showActivityError(message) {
+      const list = $("activity");
+      const p = document.createElement("p");
+      p.className = "empty error";
+      p.textContent = message;
+      list.replaceChildren(p);
+    }
+
+    async function refreshDashboard() {
+      if (refreshing) return;
+      refreshing = true;
+      $("refresh-button").disabled = true;
+      setText("last-updated", "Loading repository activity…");
+
+      try {
+        const [repo, pulls, issues, branches, commits] = await Promise.all([
+          getJson(""),
+          getJson("/pulls?state=open&per_page=100"),
+          getJson("/issues?state=open&per_page=100"),
+          getJson("/branches?per_page=100"),
+          getJson("/commits?per_page=5")
+        ]);
+
+        // GitHub's issues endpoint also returns pull requests.
+        const issueCount = issues.filter((ite
